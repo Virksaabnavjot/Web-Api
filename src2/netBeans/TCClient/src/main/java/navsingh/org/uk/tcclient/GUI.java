@@ -42,6 +42,11 @@ public class GUI extends javax.swing.JFrame {
         postBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         postResultsTA = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        numberTF = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        deleteResultsTA = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,7 +72,7 @@ public class GUI extends javax.swing.JFrame {
         resultsTA.setRows(5);
         jScrollPane1.setViewportView(resultsTA);
 
-        echoPostTitleLbl.setText("Echo (POST REQUEST)");
+        echoPostTitleLbl.setText("Echo (POST Request)");
 
         postBtn.setText("POST");
         postBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -79,6 +84,19 @@ public class GUI extends javax.swing.JFrame {
         postResultsTA.setColumns(20);
         postResultsTA.setRows(5);
         jScrollPane2.setViewportView(postResultsTA);
+
+        jLabel2.setText("Delete Numbers (DELETE Request)");
+
+        jButton1.setText("Delete");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        deleteResultsTA.setColumns(20);
+        deleteResultsTA.setRows(5);
+        jScrollPane3.setViewportView(deleteResultsTA);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -96,7 +114,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(echoPostTitleLbl)
                                     .addComponent(postBtn)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)))))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,8 +122,14 @@ public class GUI extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(celsiusTF, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(convertCtoFBtn)))))
-                .addContainerGap())
+                                .addComponent(convertCtoFBtn))
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(numberTF, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,10 +146,18 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(celsiusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(postBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(220, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numberTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -179,6 +211,26 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_postBtnActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            Client client = Client.create();
+            int port = 8080;
+            int number = Integer.parseInt(numberTF.getText());
+            String url = "http://localhost:" + port + "/api/tc/" +number;
+
+            WebResource webResource = client.resource(url);
+
+            ClientResponse response = webResource.type("application/json")
+                    .delete(ClientResponse.class);
+
+            String output = response.getEntity(String.class);
+            deleteResultsTA.setText(output);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -218,11 +270,16 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel CtoFTitleLbl;
     private javax.swing.JTextField celsiusTF;
     private javax.swing.JButton convertCtoFBtn;
+    private javax.swing.JTextArea deleteResultsTA;
     private javax.swing.JLabel echoPostTitleLbl;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField numberTF;
     private javax.swing.JButton postBtn;
     private javax.swing.JTextArea postResultsTA;
     private javax.swing.JTextArea resultsTA;
