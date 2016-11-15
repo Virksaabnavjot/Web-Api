@@ -10,6 +10,9 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class GetClient {
     public static void main(String []args){
+        
+        GUI myGUI = new GUI();
+        myGUI.setVisible(true);
         int port = 8080;
         String getURL = "http://localhost:" + port + "/api/tc/temperature";
         Client client = Client.create();
