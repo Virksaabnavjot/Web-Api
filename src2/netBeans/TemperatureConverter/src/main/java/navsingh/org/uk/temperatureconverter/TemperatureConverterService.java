@@ -14,6 +14,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 /**
  *
@@ -50,7 +52,19 @@ public class TemperatureConverterService {
         //build http resonse 200, What is an Entity ?
         return Response.status(200).entity(gson.toJson(list)).build();
     }
-   
+    
+    @GET
+    @Path("/temperature")
+    @Produces("application/json")
+    public Response getTemperature(@Context UriInfo info){
+        Gson gson = new Gson();
+        CelsiusInfo celsiusInfo = new CelsiusInfo();
+        
+        String celsius = info.getQueryParameters().getFirst("celsius");
+        celsiusInfo.getFahrenheit(Double.parseDouble(celsius));
+        return Response.status(200).entity(gson.toJson(celsiusInfo)).build();
+    }
+    
     @POST //URL: http://localhost:8080/api/tc
     @Consumes("application/json")
     public Response post(String body){
