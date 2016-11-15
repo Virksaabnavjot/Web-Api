@@ -21,7 +21,7 @@ import com.google.gson.Gson;
  * @Website: https://www.navsingh.org.uk
  */
 
-@Path("iphone")
+@Path("tc")
 @Produces("application/json")
 public class TemperatureConverterService {
     //Declaring the Arraylist to hold numbers
@@ -51,7 +51,7 @@ public class TemperatureConverterService {
         return Response.status(200).entity(gson.toJson(list)).build();
     }
    
-    @POST //URL: http://localhost:8080/api/iphone
+    @POST //URL: http://localhost:8080/api/tc
     @Consumes("application/json")
     public Response post(String body){
         //declaring a arraylist
@@ -72,7 +72,7 @@ public class TemperatureConverterService {
         return Response.status(200).entity("Sum of your Numbers" +gson.toJson(map)+ " \nNew List of Numbers " +gson.toJson(list)).build();
     }
         
-    @DELETE //Sample URL: http://localhost:8080/api/iphone/1
+    @DELETE //Sample URL: http://localhost:8080/api/tc/1
     @Path("{id}")
     public Response delete(@PathParam("id") int id){
         list = getNumbers();
