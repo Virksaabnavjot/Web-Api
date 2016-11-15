@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 /**
@@ -84,6 +85,14 @@ public class TemperatureConverterService {
         Map<String, Integer> map = new HashMap<>();
         map.put("sum", sum);
         return Response.status(200).entity("Sum of your Numbers" +gson.toJson(map)+ " \nNew List of Numbers " +gson.toJson(list)).build();
+    }
+    
+    @POST
+    @Path("/echo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postEcho(String entity){
+       return Response.status(200).entity(entity).build();
     }
         
     @DELETE //Sample URL: http://localhost:8080/api/tc/1

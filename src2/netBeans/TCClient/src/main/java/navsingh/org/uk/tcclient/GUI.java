@@ -38,6 +38,10 @@ public class GUI extends javax.swing.JFrame {
         celsiusTF = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultsTA = new javax.swing.JTextArea();
+        echoPostTitleLbl = new javax.swing.JLabel();
+        postBtn = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        postResultsTA = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +67,19 @@ public class GUI extends javax.swing.JFrame {
         resultsTA.setRows(5);
         jScrollPane1.setViewportView(resultsTA);
 
+        echoPostTitleLbl.setText("Echo (POST REQUEST)");
+
+        postBtn.setText("POST");
+        postBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postBtnActionPerformed(evt);
+            }
+        });
+
+        postResultsTA.setColumns(20);
+        postResultsTA.setRows(5);
+        jScrollPane2.setViewportView(postResultsTA);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -73,7 +90,13 @@ public class GUI extends javax.swing.JFrame {
                         .addGap(15, 15, 15)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(CtoFTitleLbl)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(CtoFTitleLbl)
+                                .addGap(76, 76, 76)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(echoPostTitleLbl)
+                                    .addComponent(postBtn)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,7 +105,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(celsiusTF, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(convertCtoFBtn)))))
-                .addContainerGap(438, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,14 +113,19 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CtoFTitleLbl)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CtoFTitleLbl)
+                    .addComponent(echoPostTitleLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(convertCtoFBtn)
-                    .addComponent(celsiusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(230, Short.MAX_VALUE))
+                    .addComponent(celsiusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(postBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -129,6 +157,27 @@ public class GUI extends javax.swing.JFrame {
         //System.out.println(response.getEntity(String.class));
         resultsTA.setText(response.getEntity(String.class));
     }//GEN-LAST:event_convertCtoFBtnActionPerformed
+
+    private void postBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postBtnActionPerformed
+        try {
+            Client client = Client.create();
+            int port = 8080;
+            String url = "http://localhost:" + port + "/api/tc/echo";
+
+            WebResource webResource = client.resource(url);
+
+            String input = "{\"band\":\"Metallica\",\"title\":\"Fade To Black\"}";
+
+            ClientResponse response = webResource.type("application/json")
+                    .post(ClientResponse.class, input);
+
+            String output = response.getEntity(String.class);
+            postResultsTA.setText(output);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_postBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -169,9 +218,13 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel CtoFTitleLbl;
     private javax.swing.JTextField celsiusTF;
     private javax.swing.JButton convertCtoFBtn;
+    private javax.swing.JLabel echoPostTitleLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton postBtn;
+    private javax.swing.JTextArea postResultsTA;
     private javax.swing.JTextArea resultsTA;
     // End of variables declaration//GEN-END:variables
 }
